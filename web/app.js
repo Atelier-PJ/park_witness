@@ -22,7 +22,7 @@ async function login() {
   token=(await post('/login',credentials)).token;f.password.value='';await enter();
 }
 async function enter() {
-  me=await api('/me');$('#auth').hidden=true;$('#workspace').hidden=false;$('#account-email').textContent=me.email;
+  me=await api('/me');document.querySelectorAll('nav button').forEach(n=>n.classList.toggle('active',n.dataset.tab==='cases'));document.querySelectorAll('.tab').forEach(n=>n.hidden=n.id!=='cases');$('#auth').hidden=true;$('#workspace').hidden=false;$('#account-email').textContent=me.email;
   $('#vehicle-status').textContent=me.vehicles.some(v=>v.verified)?'차량 확인 완료 · 모의 차량은 목록에 별도 표시':'차량 확인 대기 · 운영자 확인 후 사건 등록 가능';
   document.querySelectorAll('.vehicles').forEach(select=>{select.replaceChildren();for(const v of me.vehicles){const o=el('option',`${v.label} · ${v.source==='demo_fixture_not_real_ownership'?'가상 차량':v.verified?'확인 완료':'확인 대기'}`);o.value=v.id;o.disabled=!v.verified;select.append(o);}});
   await refresh();message('로그인했습니다. 영상 제공은 개별 승인이 필요합니다.');
@@ -43,7 +43,9 @@ function requestSummary(parent,r) {
   parent.append(el('p',r.purpose));
 }
 async function refresh() {
+  const viewerToken=token;
   const [cases,inbox,sessions]=await Promise.all([api('/incidents'),api('/inbox'),api('/sessions')]);
+  if(token!==viewerToken)return;
   renderCases(cases);renderInbox(inbox);renderParking(sessions);
 }
 function renderCases(cases) {

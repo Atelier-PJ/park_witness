@@ -1,0 +1,39 @@
+# MVP 검증 기록
+
+검증일: 2026-11-12, Asia/Seoul. 기존 Park on Wheels의 검증 결과를 재사용하지 않고 새 프로젝트를 빌드·시험했습니다.
+
+## 확인 결과
+
+| 항목 | 결과 |
+| --- | --- |
+| GitHub 조직 권한 | HTTPS 인증으로 Atelier-PJ active/admin 확인. 비공개 저장소 생성 HTTP 201, main push 성공 |
+| SQLite HTTP 통합 테스트 | 33 passed. [로그](sqlite-tests.log) |
+| PostgreSQL 16.14 HTTP 통합 테스트 | 별도 일회성 컨테이너 DB에서 33 passed. [로그](postgres-tests.log) |
+| Kotlin 핵심 제한 규칙 테스트 | 1 passed, failures=0, errors=0. [JUnit 결과](kotlin-test.xml) |
+| 웹 JavaScript | node --check web/app.js 통과 |
+| 브라우저 실사용 | 앱 내 브라우저에서 계정 로그인·사건 접수·익명 1명 매칭·목격자 요청함·모의 PNG 업로드·미리보기·수신자/목적 확인·개별 승인 확인 |
+| 모바일 화면 | 약 580px 폭에서 요청함/승인 화면 확인. [승인 화면](mobile-approved.png) |
+| Android debug | demoDebug / pleosDebug APK 생성 성공 |
+| Android release | demoRelease / pleosRelease APK 생성 성공. 둘 다 **unsigned**, 제출용 서명 미적용 |
+| 로컬 전체 Android 빌드 | JDK 17.0.21, Gradle 8.11.1, AGP 8.9.2, Kotlin 2.0.21, SDK 35, Build Tools 36.0.0. BUILD SUCCESSFUL, 174 tasks. [로그](android-build.log) |
+| GitHub Actions | [서버·PostgreSQL·Android 작업 모두 성공](https://github.com/Atelier-PJ/park_witness/actions/runs/43218079313). APK 아티팩트 업로드 성공 |
+| Pleos 실제 차량 신호 | **미검증**. SDK 2.3.2의 typed Gear 조회·CarUxRestrictions 코드는 컴파일 완료. 실차 값/권한/변경 알림 검증과 구분 |
+| 실제 영상 SDK | **미연동**. 블랙박스·다른 차량 영상 조회·V2V 없음 |
+| 메일·푸시·객체 저장소 | 미연동. 요청함 새로고침·비공개 로컬 파일 저장으로 대체 |
+
+통합 테스트에는 다른 시설/층/시간 제외, 명시적 인접 구역 확대, 후보 익명화, 동시 중복 매칭, 차량 권한 미확인 차단, 다른 사용자 접근 차단, 승인 전 열람 차단, 요청/파일/링크 만료, 거절 후 상태 변경 차단, 철회·사건 종료 후 이전 링크 차단, 피해 사진 비공개, 재접속과 보관 삭제가 포함됩니다.
+
+## 빌드 중 확인한 환경 문제와 수정
+
+- Android Studio의 현재 Java 25는 이 프로젝트의 Kotlin/Gradle 조합과 맞지 않아 공식 Temurin JDK 17을 임시 폴더에서 사용했습니다.
+- 문서 폴더의 클라우드 동기화로 SDK JAR가 dataless 자리표시자가 되어 EOFException이 발생했습니다. 소스·SDK를 `/private/tmp`의 별도 빌드 디렉터리로 복사해 빌드했습니다. 사용자 전역 SDK 설정은 바꾸지 않았습니다.
+- Kotlin daemon의 기존 권한 문제를 피하기 위해 로컬 검증 시 `--no-daemon -Pkotlin.compiler.execution.strategy=in-process`를 사용했습니다.
+- 첫 CI는 SDK setup action의 기본 `tools` 패키지가 더 이상 제공되지 않아 실패했습니다. 설치 패키지를 `platform-tools`로 명시한 재실행은 모든 작업이 통과했습니다.
+- SDK Gear 조회 메서드가 deprecated라는 경고가 있습니다. 컴파일 성공을 실제 지원 확인으로 간주하지 않습니다. 향후 Google GEAR_SELECTION 속성 전환 검토가 필요합니다.
+- Chrome CLI 실행은 macOS 권한 제한으로 실패해 앱 내 브라우저로 검증했습니다. 완전한 다중 기기/해상도 브라우저 자동화, 실제 영상 재생 코덱 시험은 수행하지 않았습니다.
+
+## 결과물
+
+`artifacts/`에 로컬 APK 4개와 SHA256SUMS가 있습니다. APK는 Git에 넣지 않으며 GitHub Actions의 `park-witness-apks` 아티팩트에서도 받을 수 있습니다. debug APK는 개발 서명으로 설치용이며 HTTP 개발 서버 연결을 허용합니다. release APK는 서명 전 패키지이며 HTTPS만 허용합니다. 실제 공모전 제출용 서명 키·lineage·플랫폼 심사·실차 검증은 완료되지 않았습니다.
+
+공개 운영 배포는 하지 않았습니다. DB 스키마 마이그레이션, 운영자 인증 UI, 파일 악성 검사, 서버 로그인 속도 제한, 푸시/메일 전송, 실제 시설 배치, 실제 사용자·차량 확인과 보관 정책 운영은 별도 작업입니다.

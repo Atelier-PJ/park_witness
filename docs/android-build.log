@@ -1,0 +1,245 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+Unable to initialize metrics, ensure /Users/jihyun/.android is writable, details: /Users/jihyun/.android/analytics.settings (Operation not permitted)
+This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+Checking the license for package Android SDK Platform-Tools in /private/tmp/park-witness-sdk/licenses
+License for package Android SDK Platform-Tools accepted.
+Preparing "Install Android SDK Platform-Tools v.37.0.1".
+"Install Android SDK Platform-Tools v.37.0.1" ready.
+Installing Android SDK Platform-Tools in /private/tmp/park-witness-sdk/platform-tools
+"Install Android SDK Platform-Tools v.37.0.1" complete.
+"Install Android SDK Platform-Tools v.37.0.1" finished.
+
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:processResources NO-SOURCE
+> Task :core:processTestResources NO-SOURCE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDemoDebugBuild UP-TO-DATE
+> Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+
+> Task :core:compileKotlin
+Caught exception: Could not start the FSEvents stream: /private/tmp/park-witness-build
+
+> Task :app:generateDemoDebugBuildConfig
+> Task :app:generateDemoDebugResValues
+> Task :app:checkDemoDebugAarMetadata
+> Task :app:mapDemoDebugSourceSetPaths
+> Task :app:generateDemoDebugResources
+> Task :app:packageDemoDebugResources
+> Task :app:createDemoDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDemoDebug
+> Task :app:parseDemoDebugLocalResources
+> Task :app:processDemoDebugMainManifest
+> Task :app:mergeDemoDebugResources
+> Task :app:processDemoDebugManifest
+> Task :app:processDemoDebugManifestForPackage
+> Task :app:javaPreCompileDemoDebug
+> Task :app:mergeDemoDebugShaders
+> Task :app:compileDemoDebugShaders NO-SOURCE
+> Task :app:generateDemoDebugAssets UP-TO-DATE
+> Task :app:mergeDemoDebugAssets
+> Task :app:compressDemoDebugAssets
+> Task :app:desugarDemoDebugFileDependencies
+> Task :app:mergeDemoDebugJniLibFolders
+> Task :app:checkDemoDebugDuplicateClasses
+> Task :app:validateSigningDemoDebug
+> Task :app:processDemoDebugResources
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar
+> Task :app:writeDemoDebugAppMetadata
+> Task :app:mergeDemoDebugNativeLibs
+> Task :app:writeDemoDebugSigningConfigVersions
+> Task :app:prePleosDebugBuild UP-TO-DATE
+> Task :app:mergePleosDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generatePleosDebugBuildConfig
+
+> Task :app:stripDemoDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+
+> Task :app:generatePleosDebugResValues
+> Task :app:checkPleosDebugAarMetadata
+> Task :app:mapPleosDebugSourceSetPaths
+> Task :app:generatePleosDebugResources
+> Task :app:packagePleosDebugResources
+> Task :app:createPleosDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksPleosDebug
+> Task :app:parsePleosDebugLocalResources
+> Task :app:mergeLibDexDemoDebug
+> Task :app:processPleosDebugMainManifest
+> Task :app:processPleosDebugManifest
+> Task :app:javaPreCompilePleosDebug
+> Task :app:processPleosDebugManifestForPackage
+> Task :app:mergePleosDebugShaders
+> Task :app:mergePleosDebugResources
+> Task :app:compilePleosDebugShaders NO-SOURCE
+> Task :app:generatePleosDebugAssets UP-TO-DATE
+> Task :app:mergePleosDebugAssets
+> Task :app:compressPleosDebugAssets
+> Task :app:desugarPleosDebugFileDependencies
+> Task :app:mergePleosDebugJniLibFolders
+> Task :app:checkPleosDebugDuplicateClasses
+> Task :app:mergePleosDebugNativeLibs
+> Task :app:mergeLibDexPleosDebug
+> Task :app:validateSigningPleosDebug
+
+> Task :app:stripPleosDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+
+> Task :app:writePleosDebugAppMetadata
+> Task :app:writePleosDebugSigningConfigVersions
+> Task :app:preDemoReleaseBuild UP-TO-DATE
+> Task :app:mergeDemoReleaseJniLibFolders
+> Task :app:mergeDemoReleaseNativeLibs
+> Task :app:processPleosDebugResources
+> Task :app:mergeDemoReleaseArtProfile
+> Task :app:desugarDemoReleaseFileDependencies
+
+> Task :app:stripDemoReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+
+> Task :app:extractDemoReleaseNativeSymbolTables
+> Task :app:buildKotlinToolingMetadata
+> Task :app:mergeDemoReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:generateDemoReleaseBuildConfig
+> Task :app:generateDemoReleaseResValues
+> Task :app:mapDemoReleaseSourceSetPaths
+> Task :app:generateDemoReleaseResources
+> Task :app:checkDemoReleaseAarMetadata
+> Task :app:mergeExtDexDemoDebug
+> Task :core:compileTestKotlin
+> Task :app:compileDemoDebugKotlin
+> Task :app:packageDemoReleaseResources
+> Task :app:createDemoReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksDemoRelease
+> Task :app:parseDemoReleaseLocalResources
+> Task :app:processDemoReleaseMainManifest
+> Task :app:processDemoReleaseManifest
+> Task :app:processDemoReleaseManifestForPackage
+> Task :app:javaPreCompileDemoRelease
+> Task :app:mergeDemoReleaseStartupProfile
+> Task :app:mergeDemoReleaseShaders
+> Task :app:compileDemoReleaseShaders NO-SOURCE
+> Task :app:generateDemoReleaseAssets UP-TO-DATE
+> Task :app:checkDemoReleaseDuplicateClasses
+> Task :app:mergeDemoReleaseAssets
+> Task :app:mergeDemoReleaseResources
+> Task :app:mergeExtDexPleosDebug
+> Task :app:compilePleosDebugKotlin
+> Task :app:mergeExtDexDemoRelease
+
+> Task :app:compilePleosDebugKotlin
+w: file:///private/tmp/park-witness-build/app/src/pleos/java/com/parkwitness/app/BuildVehicleSource.kt:66:27 'fun getCurrentGearSelectionState(onComplete: (VehicleGear?) -> Unit, onFailed: (Exception) -> Unit): Unit' is deprecated. This API is deprecated, use the Google GEAR_SELECTION property.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :core:test
+> Task :app:compileDemoDebugJavaWithJavac
+> Task :app:dexBuilderDemoDebug
+> Task :app:mergeDemoDebugGlobalSynthetics
+> Task :app:processDemoDebugJavaRes
+> Task :app:mergeProjectDexDemoDebug
+> Task :app:mergeDemoDebugJavaResource
+> Task :app:compilePleosDebugJavaWithJavac
+> Task :app:dexBuilderPleosDebug
+> Task :app:processPleosDebugJavaRes
+> Task :app:mergePleosDebugGlobalSynthetics
+> Task :app:mergeProjectDexPleosDebug
+> Task :app:packageDemoDebug
+> Task :app:createDemoDebugApkListingFileRedirect
+> Task :app:assembleDemoDebug
+> Task :app:compressDemoReleaseAssets
+> Task :app:extractDemoReleaseVersionControlInfo
+> Task :app:extractProguardFiles
+> Task :app:collectDemoReleaseDependencies
+> Task :app:processDemoReleaseResources
+> Task :app:sdkDemoReleaseDependencyData
+> Task :app:writeDemoReleaseAppMetadata
+> Task :app:writeDemoReleaseSigningConfigVersions
+> Task :app:prePleosReleaseBuild UP-TO-DATE
+> Task :app:mergePleosReleaseJniLibFolders
+> Task :app:generatePleosReleaseBuildConfig
+> Task :app:mergePleosReleaseNativeLibs
+> Task :app:generatePleosReleaseResValues
+
+> Task :app:stripPleosReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+
+> Task :app:checkPleosReleaseAarMetadata
+> Task :app:checkPleosReleaseDuplicateClasses
+> Task :app:mapPleosReleaseSourceSetPaths
+> Task :app:extractPleosReleaseNativeSymbolTables
+> Task :app:generatePleosReleaseResources
+> Task :app:mergePleosDebugJavaResource
+> Task :app:mergePleosReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:packagePleosDebug
+> Task :app:createPleosDebugApkListingFileRedirect
+> Task :app:assemblePleosDebug
+> Task :app:packagePleosReleaseResources
+> Task :app:createPleosReleaseCompatibleScreenManifests
+> Task :app:parsePleosReleaseLocalResources
+> Task :app:extractDeepLinksPleosRelease
+> Task :app:processPleosReleaseMainManifest
+> Task :app:processPleosReleaseManifest
+> Task :app:javaPreCompilePleosRelease
+> Task :app:processPleosReleaseManifestForPackage
+> Task :app:desugarPleosReleaseFileDependencies
+> Task :app:mergePleosReleaseStartupProfile
+> Task :app:mergePleosReleaseResources
+> Task :app:compileDemoReleaseKotlin
+> Task :app:optimizeDemoReleaseResources
+> Task :app:mergeExtDexPleosRelease
+> Task :app:compileDemoReleaseJavaWithJavac
+> Task :app:dexBuilderDemoRelease
+> Task :app:mergeDemoReleaseGlobalSynthetics
+> Task :app:generateDemoReleaseLintVitalReportModel
+> Task :app:processDemoReleaseJavaRes
+> Task :app:mergePleosReleaseShaders
+> Task :app:mergePleosReleaseArtProfile
+> Task :app:compilePleosReleaseShaders NO-SOURCE
+> Task :app:generatePleosReleaseAssets UP-TO-DATE
+> Task :app:mergePleosReleaseAssets
+> Task :app:compressPleosReleaseAssets
+> Task :app:extractPleosReleaseVersionControlInfo
+> Task :app:collectPleosReleaseDependencies
+> Task :app:processPleosReleaseResources
+> Task :app:sdkPleosReleaseDependencyData
+> Task :app:writePleosReleaseAppMetadata
+> Task :app:writePleosReleaseSigningConfigVersions
+> Task :app:optimizePleosReleaseResources
+> Task :app:mergeDemoReleaseJavaResource
+> Task :app:mergeDexDemoRelease
+> Task :app:lintVitalAnalyzeDemoRelease
+> Task :app:compileDemoReleaseArtProfile
+> Task :app:compilePleosReleaseKotlin
+w: file:///private/tmp/park-witness-build/app/src/pleos/java/com/parkwitness/app/BuildVehicleSource.kt:66:27 'fun getCurrentGearSelectionState(onComplete: (VehicleGear?) -> Unit, onFailed: (Exception) -> Unit): Unit' is deprecated. This API is deprecated, use the Google GEAR_SELECTION property.
+
+> Task :app:compilePleosReleaseJavaWithJavac
+> Task :app:dexBuilderPleosRelease
+> Task :app:mergePleosReleaseGlobalSynthetics
+> Task :app:generatePleosReleaseLintVitalReportModel
+> Task :app:processPleosReleaseJavaRes
+
+> Task :app:lintVitalAnalyzeDemoRelease
+Warning: Unable to initialize metrics, ensure /Users/jihyun/.android is writable, details: /Users/jihyun/.android/analytics.settings (Operation not permitted)
+
+> Task :app:lintVitalReportDemoRelease
+> Task :app:lintVitalDemoRelease
+> Task :app:packageDemoRelease
+> Task :app:createDemoReleaseApkListingFileRedirect
+> Task :app:assembleDemoRelease
+> Task :app:mergePleosReleaseJavaResource
+> Task :app:mergeDexPleosRelease
+> Task :app:compilePleosReleaseArtProfile
+> Task :app:lintVitalAnalyzePleosRelease
+> Task :app:lintVitalReportPleosRelease
+> Task :app:lintVitalPleosRelease
+> Task :app:packagePleosRelease
+> Task :app:createPleosReleaseApkListingFileRedirect
+> Task :app:assemblePleosRelease
+
+BUILD SUCCESSFUL in 24m 4s
+174 actionable tasks: 174 executed
