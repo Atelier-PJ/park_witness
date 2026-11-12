@@ -1,0 +1,8 @@
+.git
+.venv
+.data
+.android-sdk
+.gradle
+**/build
+artifacts
+output
