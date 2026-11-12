@@ -18,3 +18,5 @@ output/
 .playwright-cli/
 
 .kotlin/
+
+.idea/
