@@ -18,6 +18,7 @@
 | 로컬 전체 Android 빌드 | JDK 17.0.21, Gradle 8.11.1, AGP 8.9.2, Kotlin 2.0.21, SDK 35, Build Tools 36.0.0. BUILD SUCCESSFUL, 174 tasks. [로그](android-build.log) |
 | GitHub Actions | [서버·PostgreSQL·Android 작업 모두 성공](https://github.com/Atelier-PJ/park_witness/actions/runs/43218079313). APK 아티팩트 업로드 성공 |
 | Pleos 실제 차량 신호 | **미검증**. SDK 2.3.2의 typed Gear 조회·CarUxRestrictions 코드는 컴파일 완료. 실차 값/권한/변경 알림 검증과 구분 |
+| Pleos 에뮬레이터의 demo 앱 실행 | Android 14/API 34에서 demo APK 직접 설치 Success. MainActivity COLD 실행 Status: ok, TotalTime 1646ms, 정상 프로세스 확인. [실행 화면](android-demo-runtime.png). 모의 P/UX 상태이며 실제 SDK 신호 확인과 구분 |
 | 실제 영상 SDK | **미연동**. 블랙박스·다른 차량 영상 조회·V2V 없음 |
 | 메일·푸시·객체 저장소 | 미연동. 요청함 새로고침·비공개 로컬 파일 저장으로 대체 |
 
@@ -37,3 +38,7 @@
 `artifacts/`에 로컬 APK 4개와 SHA256SUMS가 있습니다. APK는 Git에 넣지 않으며 GitHub Actions의 `park-witness-apks` 아티팩트에서도 받을 수 있습니다. debug APK는 개발 서명으로 설치용이며 HTTP 개발 서버 연결을 허용합니다. release APK는 서명 전 패키지이며 HTTPS만 허용합니다. 실제 공모전 제출용 서명 키·lineage·플랫폼 심사·실차 검증은 완료되지 않았습니다.
 
 공개 운영 배포는 하지 않았습니다. DB 스키마 마이그레이션, 운영자 인증 UI, 파일 악성 검사, 서버 로그인 속도 제한, 푸시/메일 전송, 실제 시설 배치, 실제 사용자·차량 확인과 보관 정책 운영은 별도 작업입니다.
+
+## Android Studio 재실행 확인
+
+ParkWitness 프로젝트를 Android Studio에서 다시 열고 Pleos AVD를 시작했습니다. IDE의 기존 SDK 경로 설정 파일 수정은 자동 승인 검토에서 허용되지 않아 적용하지 않았습니다. 이미 검증된 APK를 로컬 디버그 연결로 직접 설치해 실행을 확인했습니다. IDE의 Run 버튼으로 재빌드·설치하는 전체 흐름과 실제 차량 신호 검증은 완료 항목에 포함하지 않습니다.
