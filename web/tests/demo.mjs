@@ -33,7 +33,7 @@ try{
  await page.getByRole('button',{name:'자료 등록 후 검토하기'}).click();await until(async()=>await page.locator('#inbox-list .request').count()===1);await hold(1800);
  await chapter('approve','05  확인한 자료만 개별 승인','미리보기와 수신자·목적·열람 기한을 확인합니다.');
  const share=page.locator('#inbox-list .request').first();await share.getByRole('button',{name:'내 공유본 미리보기'}).click();
- await until(()=>share.locator('video').evaluate(video=>video.readyState>=2));await share.locator('video').evaluate(video=>video.play());await hold(6500);
+ await until(()=>share.locator('video').evaluate(video=>video.readyState>=2));await share.locator('video').scrollIntoViewIfNeeded();await share.locator('video').evaluate(video=>video.play());await hold(6500);
  await share.locator('input[type=checkbox]').check();await share.locator('select').selectOption('6');await hold(3000);await share.getByRole('button',{name:'이 자료의 개별 공유 승인'}).click();await until(async()=>await page.getByRole('button',{name:'공유 승인 철회'}).count()===1);await hold(3500);
  await chapter('receive','06  승인 자료 전달','로그인한 사건 요청자에게만 자료를 전달합니다.');
  await logout();await login('requester');await page.locator('#case-list').scrollIntoViewIfNeeded();await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).waitFor();await hold(3500);
@@ -42,4 +42,4 @@ try{
  await page.getByRole('button',{name:'사건 종료',exact:true}).click();await until(async()=>await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).count()===0);await hold(5000);
  scenes.push({id:'end',time:(Date.now()-start)/1000});
  await context.close();const video=await page.video().path();await writeFile(out+'/scenes.json',JSON.stringify({video,scenes},null,2));console.log('DEMO RECORDING PASS');
-}finally{if(context)await context.close();if(browser)await browser.close();server.kill('SIGTERM');}
+}catch(error){if(page){await writeFile(out+'/failure.txt',await page.locator('body').innerText());await page.screenshot({path:out+'/failure.png',fullPage:true});}throw error;}finally{if(context)await context.close();if(browser)await browser.close();server.kill('SIGTERM');}
