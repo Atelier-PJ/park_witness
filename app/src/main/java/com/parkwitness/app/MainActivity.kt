@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 var vehicles by remember { mutableStateOf(JSONArray()) }
                 var sessions by remember { mutableStateOf(JSONArray()) }
                 var inbox by remember { mutableStateOf(JSONArray()) }
-                var message by remember { mutableStateOf("휴대전화에서 사건 접수와 자료 공유를 이어갈 수 있어요.") }
+                var message by remember { mutableStateOf("사건 접수와 자료 공유는 휴대전화에서 이용할 수 있습니다.") }
                 fun persist() { preferences.edit().putString("server",server).putString("email",email).putString("facility",facility).putString("floor",floor).putString("zone",zone).apply() }
                 fun perform(block: (Long) -> Unit) {
                     if(!allowed || busy) return
@@ -54,15 +54,15 @@ class MainActivity : ComponentActivity() {
                 }
                 fun refresh(api: WitnessApi,epoch:Long=taskEpoch) {
                     val newSessions=JSONArray(api.call("/api/sessions"));val newInbox=JSONArray(api.call("/api/inbox"))
-                    runOnUiThread { if(epoch==taskEpoch&&allowed) { sessions=newSessions;inbox=newInbox;message="요청함을 갱신했습니다." } }
+                    runOnUiThread { if(epoch==taskEpoch&&allowed) { sessions=newSessions;inbox=newInbox;message="최신 정보를 불러왔습니다." } }
                 }
                 Surface(Modifier.fillMaxSize()) {
                     WitnessScaffold(allowed,source.label,signal) {
                         if(!allowed) {
-                            Text("주차·화면 사용 허용 상태를 확인할 수 없습니다. 상세 입력을 잠갔습니다. 작성 내용은 저장됩니다.")
+                            Text("차량 상태를 확인할 수 없어 입력을 잠시 중단했습니다. 입력한 내용은 저장됩니다.")
                         } else {
-                            Text(if(token.isBlank()) "내 차를 위한 작은 연결" else "주차 참여와 요청 현황",style=MaterialTheme.typography.headlineSmall)
-                            Text(if(token.isBlank()) "로그인하고 내 주차 기록과 받은 요청을 확인하세요." else "직접 확인한 주차 위치로 참여해주세요.",color=Color(0xFF61746C),style=MaterialTheme.typography.bodyMedium)
+                            Text(if(token.isBlank()) "로그인" else "내 주차 정보",style=MaterialTheme.typography.headlineSmall)
+                            Text(if(token.isBlank()) "등록한 계정으로 로그인하세요." else "주차한 위치를 등록하면 근처에서 보낸 목격 요청을 받을 수 있습니다.",color=Color(0xFF61746C),style=MaterialTheme.typography.bodyMedium)
                             TextButton(onClick={settings=!settings}) {Text(if(settings) "연결 설정 접기 −" else "서버 연결 설정 +")}
                             if(settings) {OutlinedTextField(server,{server=it;persist()},label={Text("서버 주소")},singleLine=true,modifier=Modifier.fillMaxWidth());Text(source.label,style=MaterialTheme.typography.bodySmall)}
                             if(token.isBlank()) {
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                                 val access=result.getString("token");val me=JSONObject(WitnessApi(server,access).call("/api/me"))
                                 runOnUiThread { if(epoch==taskEpoch&&allowed) {token=access;password="";vehicles=me.getJSONArray("vehicles");selectedVehicle=(0 until vehicles.length()).map { vehicles.getJSONObject(it) }.firstOrNull { it.optBoolean("verified") }?.getString("id") ?: ""} }
                                 refresh(WitnessApi(server,access),epoch)
-                            } }) { Text(if(busy) "연결 중…" else if(token.isBlank()) "로그인하고 시작하기  →" else "계정 현황 갱신") }
+                            } }) { Text(if(busy) "연결 중…" else if(token.isBlank()) "로그인" else "계정 현황 갱신") }
                             }
                             if(token.isNotBlank()) {
                                 Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {
@@ -97,36 +97,36 @@ class MainActivity : ComponentActivity() {
                                     OutlinedTextField(floor,{floor=it;persist()},label={Text("층")},modifier=Modifier.weight(1f))
                                     OutlinedTextField(zone,{zone=it;persist()},label={Text("구역")},modifier=Modifier.weight(1f))
                                 }
-                                Row { Checkbox(consent,{consent=it});Text("현재 위치를 확인했고 주차 세션 매칭에 참여합니다. 자료 제공은 별도 승인합니다.",Modifier.padding(top=12.dp)) }
+                                Row { Checkbox(consent,{consent=it});Text("이 주차 정보를 목격 요청 매칭에 사용하는 데 동의합니다. 자료 공유 여부는 요청을 받은 뒤 선택합니다.",Modifier.padding(top=12.dp)) }
                                 Button(modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),enabled=!busy&&consent&&(0 until vehicles.length()).any { vehicles.getJSONObject(it).optBoolean("verified") }&&selectedVehicle.isNotBlank()&&facility.isNotBlank()&&floor.isNotBlank()&&zone.isNotBlank(),onClick={ perform {
                                     val v=(0 until vehicles.length()).map { vehicles.getJSONObject(it) }.firstOrNull { it.optBoolean("verified") && it.getString("id")==selectedVehicle } ?: error("운영자가 확인한 차량이 필요합니다")
                                     WitnessApi(server,token).call("/api/sessions","POST",JSONObject().put("vehicle",v.getString("id")).put("facility",facility).put("floor",floor).put("zone",zone).put("start",Instant.now().toString()).put("direction",direction).put("consent",true))
                                     refresh(WitnessApi(server,token),it)
-                                } }) { Text("이 위치에서 참여하기  →") }
-                                OutlinedButton(modifier=Modifier.fillMaxWidth().heightIn(min=52.dp),enabled=!busy,onClick={perform {refresh(WitnessApi(server,token),it)}}) { Text("요청함 다시 확인") }
-                                if(sessions.length()==0) Text("아직 주차 기록이 없어요. 위치를 확인하고 첫 참여를 시작해보세요.",color=Color(0xFF61746C))
+                                } }) { Text("주차 위치 등록") }
+                                OutlinedButton(modifier=Modifier.fillMaxWidth().heightIn(min=52.dp),enabled=!busy,onClick={perform {refresh(WitnessApi(server,token),it)}}) { Text("새로고침") }
+                                if(sessions.length()==0) Text("등록한 주차 정보가 없습니다.",color=Color(0xFF61746C))
                                 for(index in 0 until sessions.length()) {
                                     val s=sessions.getJSONObject(index)
                                     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) {
                                         Text("${s.getString("facility")} · ${s.getString("floor")} · ${s.getString("zone")}")
-                                        Text(if(!s.optBoolean("consent")) "참여를 종료한 세션" else if(s.isNull("end")) "주차 중 · 출차 확인 전" else "사용자가 출차를 확인했습니다")
+                                        Text(if(!s.optBoolean("consent")) "목격 요청 받기 중지됨" else if(s.isNull("end")) "주차 중" else "출차 완료")
                                         Row {
-                                            if(s.isNull("end")) TextButton(enabled=!busy,onClick={perform { WitnessApi(server,token).call("/api/sessions/${s.getString("id")}/end","POST");refresh(WitnessApi(server,token),it) }}) {Text("출차 확인")}
-                                            if(s.optBoolean("consent")) TextButton(enabled=!busy,onClick={perform { WitnessApi(server,token).call("/api/sessions/${s.getString("id")}/withdraw","POST");refresh(WitnessApi(server,token),it) }}) {Text("참여 끄기")}
+                                            if(s.isNull("end")) TextButton(enabled=!busy,onClick={perform { WitnessApi(server,token).call("/api/sessions/${s.getString("id")}/end","POST");refresh(WitnessApi(server,token),it) }}) {Text("출차 완료")}
+                                            if(s.optBoolean("consent")) TextButton(enabled=!busy,onClick={perform { WitnessApi(server,token).call("/api/sessions/${s.getString("id")}/withdraw","POST");refresh(WitnessApi(server,token),it) }}) {Text("목격 요청 그만 받기")}
                                         }
                                     } }
                                 }
                                 HorizontalDivider()
                                 Text("받은 목격 요청 ${inbox.length()}건",style=MaterialTheme.typography.titleLarge)
-                                if(inbox.length()==0) Text("아직 받은 요청이 없어요. 요청이 도착하면 이곳에서 확인할 수 있습니다.",color=Color(0xFF61746C))
+                                if(inbox.length()==0) Text("받은 목격 요청이 없습니다.",color=Color(0xFF61746C))
                                 for(index in 0 until inbox.length()) {
                                     val r=inbox.getJSONObject(index)
                                     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) {
                                         Text("사건 ${r.getString("incident").take(8)} · ${r.getString("floor")} ${r.getString("zone")}")
-                                        Text("${requestStatus(r.optString("status"))} · 자료 확인과 공유는 휴대전화에서 진행")
+                                        Text("${requestStatus(r.optString("status"))} · 휴대전화에서 응답할 수 있습니다")
                                     } }
                                 }
-                                Text("휴대전화에서 자료를 직접 등록하고, 내용을 확인한 뒤 공유를 승인할 수 있어요.")
+                                Text("요청에 응답하거나 자료를 공유하려면 휴대전화에서 로그인하세요.")
                             }
                             if(message.isNotBlank()) Surface(color=Color(0xFFE7EFDF),shape=androidx.compose.foundation.shape.RoundedCornerShape(12.dp)) {Text(message,Modifier.padding(16.dp),style=MaterialTheme.typography.bodyMedium)}
                         }

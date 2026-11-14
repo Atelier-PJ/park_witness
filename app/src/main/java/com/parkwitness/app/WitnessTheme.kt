@@ -38,7 +38,7 @@ private val Muted=Color(0xFF61746C)
             Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically) {
                 Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
                     Box(Modifier.size(46.dp).background(Forest,RoundedCornerShape(15.dp)),contentAlignment=Alignment.Center) {Text("W",color=Mint,fontSize=27.sp,fontWeight=FontWeight.Bold)}
-                    Column {Text("PARK WITNESS",fontWeight=FontWeight.Bold,fontSize=18.sp,letterSpacing=1.sp);Text("함께 확인하는 주차 안전",fontSize=12.sp,color=Muted)}
+                    Column {Text("PARK WITNESS",fontWeight=FontWeight.Bold,fontSize=18.sp,letterSpacing=1.sp);Text("주차장 목격 요청",fontSize=12.sp,color=Muted)}
                 }
                 Surface(color=if(allowed)Color(0xFFE5EFDD) else Color(0xFFF7E9D5),shape=RoundedCornerShape(50)) {
                     Text(if(!allowed)"상태 확인 필요" else if(source.startsWith("DEMO"))"시연 모드" else "차량 연결",Modifier.padding(horizontal=16.dp,vertical=10.dp),fontSize=12.sp,color=Forest)
@@ -51,7 +51,7 @@ private val Muted=Color(0xFF61746C)
                 WelcomePanel(Modifier.fillMaxWidth(),true)
                 InputPanel(Modifier.fillMaxWidth(),content)
             }
-            Text("자료는 직접 확인하고, 필요한 구간만 공유해주세요.",color=Muted,fontSize=12.sp,lineHeight=20.sp)
+            Text("자료 공유는 휴대전화에서 이용할 수 있습니다.",color=Muted,fontSize=12.sp,lineHeight=20.sp)
             if(!allowed)Text(signal,color=Muted,fontSize=12.sp)
         }
     }
@@ -63,13 +63,13 @@ private val Muted=Color(0xFF61746C)
 }
 @Composable private fun WelcomePanel(modifier:Modifier,compact:Boolean) {
     Column(modifier.background(Forest,RoundedCornerShape(26.dp)).padding(28.dp),verticalArrangement=Arrangement.spacedBy(20.dp)) {
-        Text("CONNECTED BY CARE",color=Mint,fontSize=11.sp,letterSpacing=2.sp,fontWeight=FontWeight.Bold)
-        Text("내 차가 보지 못한 순간,\n함께 확인해요.",color=Color.White,fontSize=if(compact)26.sp else 32.sp,lineHeight=if(compact)37.sp else 45.sp,fontWeight=FontWeight.Bold,letterSpacing=(-1).sp)
-        Text("주차장에서 시작되는\n작지만 든든한 연결.",color=Color(0xFFC3D6C8),fontSize=15.sp,lineHeight=25.sp)
+        Text("PARK WITNESS",color=Mint,fontSize=11.sp,letterSpacing=2.sp,fontWeight=FontWeight.Bold)
+        Text("주차 중 생긴 일,\n목격자를 찾아보세요.",color=Color.White,fontSize=if(compact)26.sp else 32.sp,lineHeight=if(compact)37.sp else 45.sp,fontWeight=FontWeight.Bold,letterSpacing=(-1).sp)
+        Text("같은 주차장에 있던 운전자에게\n당시 상황을 물어볼 수 있습니다.",color=Color(0xFFC3D6C8),fontSize=15.sp,lineHeight=25.sp)
         if(!compact) ParkingIllustration(Modifier.fillMaxWidth().height(180.dp))
         HorizontalDivider(color=Color(0xFF426157))
-        Text("01  참여하기     02  확인하기     03  승인하기",color=Mint,fontSize=12.sp)
-        Text("도움이 필요한 순간, 함께 확인해요.\n자료는 내가 확인하고 승인한 만큼만 공유해요.",color=Color(0xFFCBDBCD),fontSize=12.sp,lineHeight=20.sp)
+        Text("주차 위치를 등록해두세요.",color=Mint,fontSize=12.sp)
+        Text("근처에서 목격 요청이 오면 이곳에 표시됩니다.\n자료는 공유에 동의한 경우에만 전달됩니다.",color=Color(0xFFCBDBCD),fontSize=12.sp,lineHeight=20.sp)
     }
 }
 @Composable private fun ParkingIllustration(modifier:Modifier) {

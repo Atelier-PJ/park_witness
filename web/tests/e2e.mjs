@@ -16,7 +16,7 @@ try{
   const context=await browser.newContext({viewport:{width:390,height:844},acceptDownloads:true});
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base);
-  async function login(name){await page.getByLabel('이메일',{exact:true}).fill(name+'@e2e.local');await page.getByLabel('비밀번호',{exact:true}).fill('witness-e2e-password');await page.getByRole('button',{name:'로그인',exact:true}).click();await page.locator('#workspace').waitFor({state:'visible'});await waitUntil(async()=>await page.locator('#status').textContent()==='로그인했습니다. 내 사건과 받은 요청을 확인해보세요.','Login did not finish');}
+  async function login(name){await page.getByLabel('이메일',{exact:true}).fill(name+'@e2e.local');await page.getByLabel('비밀번호',{exact:true}).fill('witness-e2e-password');await page.getByRole('button',{name:'로그인',exact:true}).click();await page.locator('#workspace').waitFor({state:'visible'});await waitUntil(async()=>await page.locator('#status').textContent()==='로그인했습니다.','Login did not finish');}
   async function logout(){await page.getByRole('button',{name:'로그아웃',exact:true}).click();await page.locator('#auth').waitFor({state:'visible'});}
   const png=Buffer.from(await (await import('node:util')).promisify((cb)=>{const p=spawn(python,['-c',"from PIL import Image; import io,sys; b=io.BytesIO(); Image.new('RGB',(160,90),'green').save(b,format='PNG');sys.stdout.buffer.write(b.getvalue())"]);const data=[];p.stdout.on('data',b=>data.push(b));p.on('exit',code=>code?cb(Error('fixture failed')):cb(null,Buffer.concat(data)));})());
   await login('requester');
@@ -43,13 +43,13 @@ try{
   for(let i=0;i<2;i++){
     const block=page.locator('#inbox-list .request').nth(i);
     // Clicking approve without decoding a preview must not authorize the file.
-    await block.locator('input[type=checkbox]').check();await block.getByRole('button',{name:'이 자료의 개별 공유 승인'}).click();
+    await block.locator('input[type=checkbox]').check();await block.getByRole('button',{name:'이 자료 공유하기'}).click();
     await waitUntil(async()=>(await page.locator('#status').textContent()).includes('공유본을 미리 보고'),'Preview gate did not reject');
     await block.getByRole('button',{name:'내 공유본 미리보기'}).click();
     await waitUntil(()=>block.locator('img').evaluate(n=>n.complete&&n.naturalWidth>0),'Preview did not decode');
     await block.locator('select').selectOption('6');
-    await block.getByRole('button',{name:'이 자료의 개별 공유 승인'}).click();
-    await waitUntil(async()=>await page.locator('#inbox-list .request').nth(i).getByRole('button',{name:'이 자료의 개별 공유 승인'}).count()===0,'Approval did not finish');
+    await block.getByRole('button',{name:'이 자료 공유하기'}).click();
+    await waitUntil(async()=>await page.locator('#inbox-list .request').nth(i).getByRole('button',{name:'이 자료 공유하기'}).count()===0,'Approval did not finish');
   }
   await page.screenshot({path:out+'/two-files-approved.png',fullPage:true});
   await logout();await login('other');assert.equal(await page.locator('#case-list article').count(),0);
@@ -57,7 +57,7 @@ try{
   assert.equal(await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).count(),2);
   const downloadWait=page.waitForEvent('download');await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).first().click();const downloaded=await downloadWait;assert.deepEqual(await readFile(await downloaded.path()),png);
   await page.getByRole('button',{name:'사건 종료',exact:true}).click();await waitUntil(async()=>await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).count()===0,'Closed case still exposes downloads');
-  await logout();await login('witness');await page.locator('nav button[data-tab=inbox]').click();assert.equal(await page.getByRole('button',{name:'이 자료의 개별 공유 승인'}).count(),0);
+  await logout();await login('witness');await page.locator('nav button[data-tab=inbox]').click();assert.equal(await page.getByRole('button',{name:'이 자료 공유하기'}).count(),0);
   assert.deepEqual(errors,[]);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Mobile page overflows');
   console.log('E2E PASS: photo retry, private photo, anonymous match, account isolation, upload, decoded preview gate, two approvals, duration, download bytes, other-user isolation, close, mobile layout');
 }finally{if(browser)await browser.close();server.kill('SIGTERM');}

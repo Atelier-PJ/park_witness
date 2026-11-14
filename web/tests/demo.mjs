@@ -14,7 +14,7 @@ try{
  browser=await chromium.launch({channel:'chrome',headless:true,slowMo:450});
  context=await browser.newContext({viewport:{width:390,height:844},recordVideo:{dir:out,size:{width:390,height:844}},locale:'ko-KR',timezoneId:'Asia/Seoul',acceptDownloads:true,reducedMotion:'reduce'});
  page=await context.newPage();start=Date.now();
- await chapter('start','필요한 순간, 함께 확인해요','피해자와 목격자의 실제 모바일 웹 흐름을 시연합니다.');
+ await chapter('start','모바일에서 사건 접수','사건 접수와 자료 공유는 모바일에서 이용합니다.');
  await page.goto(base);await hold(4000);
  async function login(who){await page.getByLabel('이메일',{exact:true}).fill(who+'@e2e.local');await page.getByLabel('비밀번호',{exact:true}).fill('witness-e2e-password');await page.getByRole('button',{name:'로그인',exact:true}).click();await until(async()=>(await page.locator('#status').textContent()).startsWith('로그인했습니다.'));await hold(1500);}
  async function logout(){await page.getByRole('button',{name:'로그아웃',exact:true}).click();await page.locator('#auth').waitFor({state:'visible'});}
@@ -26,15 +26,15 @@ try{
  await page.getByRole('button',{name:'목격 후보 찾기',exact:true}).click();await until(async()=>(await page.locator('#status').textContent()).includes('1명의 익명 후보'));await page.locator('#case-list').scrollIntoViewIfNeeded();await hold(5000);
  await chapter('inbox','03  목격자의 요청 확인','연락처 대신 사건의 시간·장소·목적을 확인합니다.');
  await logout();await login('witness');await page.locator('nav button[data-tab=inbox]').click();await hold(4000);
- await chapter('upload','04  자료를 직접 등록','차주가 내보낸 파일을 직접 등록하고 확인합니다.');
+ await chapter('upload','04  사진·영상 올리기','해당 시간의 사진이나 영상을 선택합니다.');
  await page.getByRole('button',{name:'공유 검토',exact:true}).click();await hold(1200);
  await page.locator('#inbox-list input[name=processing_notes]').fill('재현용 테스트 영상 · 개인정보 없음');
  await page.locator('#inbox-list input[type=file]').setInputFiles('web/tests/fixtures/share-demo.mp4');await hold(2500);
  await page.getByRole('button',{name:'자료 등록 후 검토하기'}).click();await until(async()=>await page.locator('#inbox-list .request').count()===1);await hold(1800);
- await chapter('approve','05  확인한 자료만 개별 승인','미리보기와 수신자·목적·열람 기한을 확인합니다.');
+ await chapter('approve','05  자료 공유하기','미리보기와 수신자·목적·열람 기한을 확인합니다.');
  const share=page.locator('#inbox-list .request').first();await share.getByRole('button',{name:'내 공유본 미리보기'}).click();
  await until(()=>share.locator('video').evaluate(video=>video.readyState>=2));await share.locator('video').scrollIntoViewIfNeeded();await share.locator('video').evaluate(video=>video.play());await hold(6500);
- await share.locator('input[type=checkbox]').check();await share.locator('select').selectOption('6');await hold(3000);await share.getByRole('button',{name:'이 자료의 개별 공유 승인'}).click();await until(async()=>await page.getByRole('button',{name:'공유 승인 철회'}).count()===1);await hold(3500);
+ await share.locator('input[type=checkbox]').check();await share.locator('select').selectOption('6');await hold(3000);await share.getByRole('button',{name:'이 자료 공유하기'}).click();await until(async()=>await page.getByRole('button',{name:'공유 승인 철회'}).count()===1);await hold(3500);
  await chapter('receive','06  승인 자료 전달','로그인한 사건 요청자에게만 자료를 전달합니다.');
  await logout();await login('requester');await page.locator('#case-list').scrollIntoViewIfNeeded();await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).waitFor();await hold(3500);
  const downloadWait=page.waitForEvent('download');await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).click();const file=await downloadWait;assert.deepEqual(await readFile(await file.path()),await readFile('web/tests/fixtures/share-demo.mp4'));await hold(3000);

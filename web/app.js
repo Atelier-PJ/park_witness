@@ -49,7 +49,7 @@ async function enter() {
   document.querySelectorAll('.vehicles').forEach(select=>{select.replaceChildren();for(const v of me.vehicles){const o=el('option',`${v.label} · ${v.source==='demo_fixture_not_real_ownership'?'가상 차량':v.verified?'확인 완료':'확인 대기'}`);o.value=v.id;o.disabled=!v.verified;select.append(o);}});
   if(confirmationToken){await post('/notifications/verify',{token:confirmationToken});confirmationToken=null;}
   const settings=await api('/notifications/settings');$('#email-notifications').checked=settings.email_enabled;$('#email-notifications').disabled=!settings.available;$('#email-notifications-status').textContent=settings.available?(settings.verified?'주소 확인 완료':'신청 후 이메일에서 주소를 확인해주세요.'):'이메일 알림 준비 중 · 받은 요청함에서 확인해주세요.';
-  await refresh();message('로그인했습니다. 내 사건과 받은 요청을 확인해보세요.');
+  await refresh();message('로그인했습니다.');
 }
 $('#login-form').addEventListener('submit',async e=>{e.preventDefault();try{await login();}catch(err){message(err.message,true);}});
 $('#register').addEventListener('click',async()=>{const f=$('#login-form');if(!f.reportValidity())return;try{await post('/register',Object.fromEntries(new FormData(f)));await login();}catch(e){message(e.message,true);}});
@@ -109,8 +109,8 @@ function renderInbox(requests) {
   for(const r of requests){const card=el('article',undefined,'card');card.append(el('small',`사건 ${r.incident.slice(0,8)} · 인증된 사건 요청자에게만 제공`));requestSummary(card,r);
     const editable=r.can_share;const actions=el('div',undefined,'actions');card.append(actions);
     if(editable){if(r.status!=='approved')for(const [status,label] of [['checking','확인 예정'],['review','공유 검토'],['no_video','영상 없음'],['rejected','거절']])action(actions,label,async()=>{await post(`/requests/${r.id}/respond`,{status});await refresh();},status==='rejected'?'danger':'secondary');
-      const form=el('form',undefined,'upload');form.innerHTML='<strong>공유할 자료 등록</strong><p class="muted">관련 구간을 파일로 직접 등록해주세요. 얼굴·번호판 등 불필요한 개인정보를 가리고, 공유 전 내용을 확인해주세요.</p><input type="hidden" name="kind" value="manual_share_copy"><label>편집·가림 처리 내용<input name="processing_notes" maxlength="1000" placeholder="예: 20초 구간 추출, 번호판 가림"></label><label>PNG · JPEG · MP4 / 최대 20MB<input type="file" name="file" accept="image/png,image/jpeg,video/mp4" required></label><button type="submit">자료 등록 후 검토하기</button>';
-      form.addEventListener('submit',e=>{e.preventDefault();submit(form,async()=>{await api(`/requests/${r.id}/evidence`,{method:'POST',body:new FormData(form)});message('등록했습니다. 공유본을 열어 검토한 뒤 별도로 승인하세요.');});});card.append(form);
+      const form=el('form',undefined,'upload');form.innerHTML='<strong>공유할 자료 등록</strong><p class="muted">해당 시간의 사진이나 영상을 올려주세요. 얼굴과 번호판 등 불필요한 개인정보는 미리 가려주세요.</p><input type="hidden" name="kind" value="manual_share_copy"><label>편집·가림 처리 내용<input name="processing_notes" maxlength="1000" placeholder="예: 20초 구간 추출, 번호판 가림"></label><label>PNG · JPEG · MP4 / 최대 20MB<input type="file" name="file" accept="image/png,image/jpeg,video/mp4" required></label><button type="submit">자료 등록 후 검토하기</button>';
+      form.addEventListener('submit',e=>{e.preventDefault();submit(form,async()=>{await api(`/requests/${r.id}/evidence`,{method:'POST',body:new FormData(form)});message('자료를 등록했습니다. 미리보기에서 내용을 확인한 뒤 공유할 수 있습니다.');});});card.append(form);
     }
     for(const evidence of r.evidence){const block=el('div',undefined,'request');block.append(el('span',evidence.kind==='mock'?'모의 자료':'공유 자료','badge '+(evidence.kind==='mock'?'mock':'')));let previewed=false;
       if(!evidence.available){block.append(el('p','자료를 더 이상 이용할 수 없습니다.'));card.append(block);continue;}
@@ -125,9 +125,9 @@ function renderInbox(requests) {
       },'secondary');
       if(editable&&!evidence.approved){
         const confirm=el('label',undefined,'check share-confirm');const checkbox=document.createElement('input');checkbox.type='checkbox';
-        confirm.append(checkbox,el('span','공유본을 검토했고 이 사건의 확인된 요청자에게 위 목적의 열람을 허용합니다.'));block.append(confirm);
+        confirm.append(checkbox,el('span','자료 내용을 확인했습니다. 이 사건을 접수한 사람에게 위 목적으로 공유하는 데 동의합니다.'));block.append(confirm);
         const duration=el('label','열람 허용 시간');const select=el('select');for(const hours of [1,6,24]){const option=el('option',`${hours}시간`);option.value=hours;select.append(option);}duration.append(select);block.append(duration);
-        action(block,'이 자료의 개별 공유 승인',async()=>{if(!previewed||!checkbox.checked)throw Error('공유본을 미리 보고 수신자·목적을 확인해주세요.');await post(`/requests/${r.id}/approve`,{evidence:evidence.id,reviewed_share_copy:true,recipient_and_purpose_confirmed:true,hours:Number(select.value)});message('지정된 사건 요청자에게만 승인했습니다.');await refresh();});
+        action(block,'이 자료 공유하기',async()=>{if(!previewed||!checkbox.checked)throw Error('공유본을 미리 보고 수신자·목적을 확인해주세요.');await post(`/requests/${r.id}/approve`,{evidence:evidence.id,reviewed_share_copy:true,recipient_and_purpose_confirmed:true,hours:Number(select.value)});message('이 사건을 접수한 사람에게 자료를 공유했습니다.');await refresh();});
       }
 
       card.append(block);
