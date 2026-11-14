@@ -62,3 +62,13 @@ ParkWitness 프로젝트를 Android Studio에서 다시 열고 Pleos AVD를 시�
 앱 내 브라우저에서 피해 사진 실패→동일 사건에서 사진만 재시도→1건 유지, 사진 조회, 익명 매칭, 다른 계정에서 빈 입력 폼, 공유 자료 등록을 확인했습니다. macOS Chromium은 MachPort 권한 오류로 실행하지 못했습니다. GitHub의 첫 E2E 환경은 ubuntu-latest가 Ubuntu 26.04로 변경돼 Playwright 1.56.1 설치에 실패했습니다. E2E 작업만 지원되는 Ubuntu 24.04로 고정해 다시 검증합니다.
 
 기존 로컬 DB 전체 백업은 자동 승인 검토에서 사적 데이터 접근 위험으로 거절됐으며 해당 데이터를 복사·변경하지 않았습니다. 시험에는 별도 일회성 합성 데이터만 사용했습니다.
+
+### 최종 GitHub 검증 통과
+
+코드 커밋 `91b6a478eefeef33c395aea09b6efef0f47f56a9`의 [전체 검증 실행](https://github.com/Atelier-PJ/park_witness/actions/runs/43555277285)에서 backend, postgres, e2e, android가 모두 success입니다. SQLite와 PostgreSQL 모두 49개 시험을 통과했고 Android APK 4종을 업로드했습니다.
+
+실제 Chromium 자동 시험은 390px 화면에서 사진 실패 후 재시도·사진 조회·후보 매칭·계정별 입력 및 사건 분리·파일 업로드·디코딩 전 승인 차단·두 자료 개별 승인·열람 기한 선택·다운로드 바이트 일치·다른 계정의 사건 미노출·사건 종료 후 자료 버튼 제거·가로 넘침 없음을 확인했습니다. GitHub 로그에 E2E PASS를 기록하고 browser-e2e-results에 결과 화면을 저장했습니다.
+
+[APK 다운로드](https://github.com/Atelier-PJ/park_witness/actions/runs/43555277285/artifacts/14097534696) · [브라우저 시험 화면](https://github.com/Atelier-PJ/park_witness/actions/runs/43555277285/artifacts/14097419531)
+
+운영용 SMTP/S3 자격증명·실제 시설 배치·실제 차량 권한 검토·실차 신호/주행 제한 런타임·제출용 서명은 외부 환경에서 별도 확인해야 합니다. 이 검증은 기획의 전체 출시·실차·파일럿 검증 완료를 뜻하지 않습니다.

@@ -19,6 +19,6 @@
 
 SQLite·PostgreSQL의 API 회귀 시험, 로컬 SMTP 수신 서버, Moto의 S3 호환 HTTP 시험 서버로 검증합니다. 합성 영상과 가상 계정만 사용합니다. Moto 검증은 운영 AWS/S3 배치나 인증 설정 검증을 의미하지 않습니다. 자세한 실행 결과는 VALIDATION.md와 GitHub Actions에서 구분합니다.
 
-macOS에서 직접 실행한 Chromium은 OS 프로세스 권한 오류로 시작하지 못했습니다. 앱 내 브라우저에서는 사진 실패·재시도·사진 조회·계정 전환·후보 매칭·자료 등록을 확인했습니다. 자동 Chromium E2E는 GitHub Actions의 별도 Linux 작업으로 실행합니다.
+macOS에서 직접 실행한 Chromium은 OS 프로세스 권한 오류로 시작하지 못했습니다. 앱 내 브라우저에서는 사진 실패·재시도·사진 조회·계정 전환·후보 매칭·자료 등록을 확인했습니다. 자동 Chromium E2E는 GitHub Actions의 Ubuntu 24.04 작업에서 실제로 통과했습니다. 코드 커밋 91b6a47의 backend·postgres·e2e·android 네 작업이 모두 성공했으며 SQLite/PostgreSQL 각각 49개 시험을 통과했습니다.
 
 실제 Pleos 차량 신호와 주행 제한 변경, 전원 종료·프로세스 복원·실차 시험은 완료로 표시하지 않습니다. 이메일·S3 운영 자격증명, 검토된 시설 배치, 실제 차량 사용 권한 심사, 제출용 APK 서명은 운영자가 제공·확인해야 합니다. release APK는 unsigned입니다. 자동 마스킹·트리밍·AI 요약·블랙박스 SDK·V2V는 구현 범위에 포함하지 않습니다.
