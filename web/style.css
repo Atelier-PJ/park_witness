@@ -185,3 +185,4 @@ to{opacity:1;transform:translateY(0)}
 .hero{margin-bottom:28px}
 
 .notification-setting{margin:0 3px 22px}.damage-photos{display:grid;gap:12px;margin-top:18px}.share-confirm+label{margin-bottom:16px}
+@media(max-width:760px){.actions button{flex:1 1 130px}.actions .quiet{flex:0 1 auto}}

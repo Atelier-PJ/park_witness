@@ -40,6 +40,7 @@ try{
  const downloadWait=page.waitForEvent('download');await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).click();const file=await downloadWait;assert.deepEqual(await readFile(await file.path()),await readFile('web/tests/fixtures/share-demo.mp4'));await hold(3000);
  await chapter('close','07  사건 종료와 접근 차단','사건을 종료하면 더 이상 자료에 접근할 수 없습니다.');
  await page.getByRole('button',{name:'사건 종료',exact:true}).click();await until(async()=>await page.getByRole('button',{name:'승인 자료 열람·다운로드'}).count()===0);await hold(5000);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Mobile viewport overflow');
  scenes.push({id:'end',time:(Date.now()-start)/1000});
  await context.close();const video=await page.video().path();await writeFile(out+'/scenes.json',JSON.stringify({video,scenes},null,2));console.log('DEMO RECORDING PASS');
 }catch(error){if(page){await writeFile(out+'/failure.txt',await page.locator('body').innerText());await page.screenshot({path:out+'/failure.png',fullPage:true});}throw error;}finally{if(context)await context.close();if(browser)await browser.close();server.kill('SIGTERM');}
