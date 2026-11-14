@@ -1,0 +1,25 @@
+name: Record demo video
+on:
+  workflow_dispatch:
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -r backend/requirements.txt
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: node web/tests/demo.mjs
+        env:
+          E2E_PYTHON: python
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: demo-recording
+          path: output/demo/
