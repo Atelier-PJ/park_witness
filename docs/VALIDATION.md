@@ -52,3 +52,13 @@ ParkWitness 프로젝트를 Android Studio에서 다시 열고 Pleos AVD를 시�
 - demoDebug, pleosDebug 빌드 성공. 최신 demo APK를 Pleos API 34 에뮬레이터에 재설치하여 실행(Status: ok)하고 새 화면을 확인했습니다. pleos flavor의 차량 신호 런타임 검증은 추가로 수행하지 않았습니다.
 - 로컬 웹에서 테스트 계정 가입·로그인, 요약 0건, 요청함·주차 탭 전환, 로그아웃을 확인했습니다. 별도 테스트 계정으로 진행했으며 실제 사용자 자료를 업로드하지 않았습니다.
 - 스크린샷: android-design-login.png, web-design-login.png, web-design-dashboard.png. APK는 artifacts/park-witness-demo-debug.apk 및 artifacts/park-witness-pleos-debug.apk에 복사했습니다(버전 관리 제외).
+
+## 진단 후 안정화 및 E2E 회귀 시험
+
+2026-11-14. 새 API 회귀 시험 49개를 SQLite에서 통과했습니다. 첫 GitHub 검증에서는 backend·postgres·android 작업이 모두 성공했습니다. S3 호환 HTTP 시험 서버(Moto)와 로컬 SMTP 수신 서버로 저장·익명 접근 차단·삭제와 이메일 주소 확인·동의·알림 수신·해제를 시험했습니다. 운영 AWS/S3나 외부 이메일 수신함 전달과 구분합니다.
+
+차량 앱의 차량·방향 선택 추가 후 core:test와 demo/pleos debug/release APK 4종 빌드에 성공했습니다. release는 unsigned이며 실제 Pleos 신호 런타임 검증을 완료했다는 의미는 아닙니다.
+
+앱 내 브라우저에서 피해 사진 실패→동일 사건에서 사진만 재시도→1건 유지, 사진 조회, 익명 매칭, 다른 계정에서 빈 입력 폼, 공유 자료 등록을 확인했습니다. macOS Chromium은 MachPort 권한 오류로 실행하지 못했습니다. GitHub의 첫 E2E 환경은 ubuntu-latest가 Ubuntu 26.04로 변경돼 Playwright 1.56.1 설치에 실패했습니다. E2E 작업만 지원되는 Ubuntu 24.04로 고정해 다시 검증합니다.
+
+기존 로컬 DB 전체 백업은 자동 승인 검토에서 사적 데이터 접근 위험으로 거절됐으며 해당 데이터를 복사·변경하지 않았습니다. 시험에는 별도 일회성 합성 데이터만 사용했습니다.

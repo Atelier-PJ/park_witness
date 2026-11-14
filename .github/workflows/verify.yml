@@ -49,7 +49,7 @@ jobs:
           TEST_S3_ENDPOINT_URL: http://127.0.0.1:19000
           TEST_DATABASE_URL: postgresql+psycopg://postgres:witness-test-only@localhost:5432/witness_test
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
