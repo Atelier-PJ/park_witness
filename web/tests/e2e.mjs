@@ -25,6 +25,7 @@ try{
   await form.locator('input[type=file]').setInputFiles({name:'broken.png',mimeType:'image/png',buffer:Buffer.from('broken')});
   await form.getByRole('button',{name:'사건 등록',exact:true}).click();
   await page.getByRole('button',{name:'사진 다시 등록',exact:true}).waitFor();
+  await waitUntil(async()=>await page.locator('#case-list article').count()===1,'Incident refresh after failed photo did not finish');
   assert.equal(await page.locator('#case-list article').count(),1);
   await form.locator('input[type=file]').setInputFiles({name:'damage.png',mimeType:'image/png',buffer:png});await form.getByRole('button',{name:'사진 다시 등록',exact:true}).click();
   await waitUntil(async()=>await form.getByRole('button',{name:'사건 등록',exact:true}).isEnabled(),'Photo retry did not complete');
