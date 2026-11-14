@@ -14,7 +14,7 @@ jobs:
           node-version: '22'
       - run: pip install -r backend/requirements.txt
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chrome
       - run: node web/tests/demo.mjs
         env:
           E2E_PYTHON: python

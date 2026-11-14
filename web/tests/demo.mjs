@@ -11,7 +11,7 @@ async function chapter(id,title,body){scenes.push({id,title,body,time:(Date.now(
 async function until(check){for(let i=0;i<100;i++){if(await check())return;await hold(100);}throw Error('Demo state did not settle');}
 try{
  const base=await new Promise((resolve,reject)=>{let text='';const timer=setTimeout(()=>reject(Error('Server start timeout')),20000);server.stdout.on('data',data=>{text+=data;const match=text.match(/E2E_PORT=(\d+)/);if(match){clearTimeout(timer);resolve('http://127.0.0.1:'+match[1]);}});server.on('exit',code=>reject(Error('Server exit '+code)));});
- browser=await chromium.launch({headless:true,slowMo:450});
+ browser=await chromium.launch({channel:'chrome',headless:true,slowMo:450});
  context=await browser.newContext({viewport:{width:390,height:844},recordVideo:{dir:out,size:{width:390,height:844}},locale:'ko-KR',timezoneId:'Asia/Seoul',acceptDownloads:true,reducedMotion:'reduce'});
  page=await context.newPage();start=Date.now();
  await chapter('start','필요한 순간, 함께 확인해요','피해자와 목격자의 실제 모바일 웹 흐름을 시연합니다.');
