@@ -42,3 +42,13 @@
 ## Android Studio 재실행 확인
 
 ParkWitness 프로젝트를 Android Studio에서 다시 열고 Pleos AVD를 시작했습니다. IDE의 기존 SDK 경로 설정 파일 수정은 자동 승인 검토에서 허용되지 않아 적용하지 않았습니다. 이미 검증된 APK를 로컬 디버그 연결로 직접 설치해 실행을 확인했습니다. IDE의 Run 버튼으로 재빌드·설치하는 전체 흐름과 실제 차량 신호 검증은 완료 항목에 포함하지 않습니다.
+
+## 디자인 및 사용자 문구 개선 (2026-11-14)
+
+- 작업 전 origin/main을 가져와 비교했으며 로컬과 동일했습니다.
+- 차량 앱: 공통 Compose 테마, 반응형 두 열 구성, 로그인·참여 현황 분리, 로그아웃, 필수값 검증, 백그라운드 전환 후 오래된 응답 무시.
+- 웹: 브랜드·일러스트·입력·요청 상태·빈 화면 개선, 실제 API 응답 기반 요약 수치, 탭 선택 접근성 상태. SDK·검증·데모 설명과 해시를 일반 화면에서 제거하고 사용자 행동 중심으로 문구를 수정했습니다.
+- SQLite HTTP 테스트 33개 통과, core 테스트 통과(변경 없음으로 UP-TO-DATE), JavaScript 구문 및 diff 공백 검사 통과.
+- demoDebug, pleosDebug 빌드 성공. 최신 demo APK를 Pleos API 34 에뮬레이터에 재설치하여 실행(Status: ok)하고 새 화면을 확인했습니다. pleos flavor의 차량 신호 런타임 검증은 추가로 수행하지 않았습니다.
+- 로컬 웹에서 테스트 계정 가입·로그인, 요약 0건, 요청함·주차 탭 전환, 로그아웃을 확인했습니다. 별도 테스트 계정으로 진행했으며 실제 사용자 자료를 업로드하지 않았습니다.
+- 스크린샷: android-design-login.png, web-design-login.png, web-design-dashboard.png. APK는 artifacts/park-witness-demo-debug.apk 및 artifacts/park-witness-pleos-debug.apk에 복사했습니다(버전 관리 제외).
