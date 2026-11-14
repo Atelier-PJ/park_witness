@@ -20,3 +20,4 @@ output/
 .kotlin/
 
 .idea/
+node_modules/

@@ -8,7 +8,8 @@ from conftest import m,window,stamp
 
 # Valid 1x1 PNG, representing an explicitly synthetic share copy.
 import base64
-PNG=base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aK1cAAAAASUVORK5CYII=')
+from PIL import Image
+_png=io.BytesIO();Image.new('RGB',(16,16),'green').save(_png,format='PNG');PNG=_png.getvalue()
 
 def upload(context,r,kind='mock'):
     c,db,h,v,u=context
@@ -202,6 +203,8 @@ def test_restart_preserves_data_and_web_contract(scenario):
 
 def test_adjacent_zone_requires_explicit_scope_expansion(context):
     c,db,h,v,u=context
+    with db() as session:
+        session.add(m.FacilityLayout(facility='PARK',adjacency_json='{"A":["B"],"B":["A","C"],"C":["B"]}'));session.commit()
     c.post('/api/sessions',headers=h['witness'],json=window(v['witness'],consent=True,zone='A'))
     i=c.post('/api/incidents',headers=h['requester'],json=window(v['requester'],description='피해 확인')).json()['id']
     assert c.post(f'/api/incidents/{i}/match',headers=h['requester']).json()['candidates']==[]

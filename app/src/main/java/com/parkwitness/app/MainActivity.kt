@@ -4,14 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import java.time.Instant
 import java.util.concurrent.Executors
 import org.json.JSONArray
@@ -38,6 +35,8 @@ class MainActivity : ComponentActivity() {
                 var floor by remember { mutableStateOf(preferences.getString("floor","")!!) }
                 var zone by remember { mutableStateOf(preferences.getString("zone","")!!) }
                 var consent by remember { mutableStateOf(false) }
+                var selectedVehicle by remember { mutableStateOf("") }
+                var direction by remember { mutableStateOf("unknown") }
                 var settings by remember { mutableStateOf(false) }
                 var vehicles by remember { mutableStateOf(JSONArray()) }
                 var sessions by remember { mutableStateOf(JSONArray()) }
@@ -73,14 +72,25 @@ class MainActivity : ComponentActivity() {
                                 val epoch=it
                                 val result=JSONObject(WitnessApi(server,"").call("/api/login","POST",JSONObject().put("email",email).put("password",password)))
                                 val access=result.getString("token");val me=JSONObject(WitnessApi(server,access).call("/api/me"))
-                                runOnUiThread { if(epoch==taskEpoch&&allowed) {token=access;password="";vehicles=me.getJSONArray("vehicles")} }
+                                runOnUiThread { if(epoch==taskEpoch&&allowed) {token=access;password="";vehicles=me.getJSONArray("vehicles");selectedVehicle=(0 until vehicles.length()).map { vehicles.getJSONObject(it) }.firstOrNull { it.optBoolean("verified") }?.getString("id") ?: ""} }
                                 refresh(WitnessApi(server,access),epoch)
                             } }) { Text(if(busy) "연결 중…" else if(token.isBlank()) "로그인하고 시작하기  →" else "계정 현황 갱신") }
                             }
                             if(token.isNotBlank()) {
                                 Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {
                                     Text(email,style=MaterialTheme.typography.bodyMedium)
-                                    TextButton(enabled=!busy,onClick={perform { epoch -> WitnessApi(server,token).call("/api/logout","POST");runOnUiThread {if(epoch==taskEpoch){token="";password="";sessions=JSONArray();inbox=JSONArray();vehicles=JSONArray();consent=false;message="로그아웃했습니다."}} }}) {Text("로그아웃")}
+                                    TextButton(enabled=!busy,onClick={perform { epoch -> WitnessApi(server,token).call("/api/logout","POST");runOnUiThread {if(epoch==taskEpoch){token="";password="";facility="";floor="";zone="";direction="unknown";selectedVehicle="";preferences.edit().remove("facility").remove("floor").remove("zone").apply();sessions=JSONArray();inbox=JSONArray();vehicles=JSONArray();consent=false;message="로그아웃했습니다."}} }}) {Text("로그아웃")}
+                                }
+                                Text("참여할 차량",style=MaterialTheme.typography.titleMedium)
+                                for(vehicleIndex in 0 until vehicles.length()) {
+                                    val vehicle=vehicles.getJSONObject(vehicleIndex)
+                                    if(vehicle.optBoolean("verified")) Row {
+                                        RadioButton(selectedVehicle==vehicle.getString("id"),onClick={selectedVehicle=vehicle.getString("id")})
+                                        Text(vehicle.getString("label"),Modifier.padding(top=12.dp))
+                                    }
+                                }
+                                OutlinedButton(onClick={val values=listOf("unknown","north","east","south","west");direction=values[(values.indexOf(direction)+1)%values.size]}) {
+                                    Text("촬영 방향: "+mapOf("unknown" to "미확인","north" to "북","east" to "동","south" to "남","west" to "서")[direction]+" · 변경")
                                 }
                                 OutlinedTextField(facility,{facility=it;persist()},label={Text("주차장 코드")},modifier=Modifier.fillMaxWidth())
                                 Row(horizontalArrangement=Arrangement.spacedBy(12.dp)) {
@@ -88,9 +98,9 @@ class MainActivity : ComponentActivity() {
                                     OutlinedTextField(zone,{zone=it;persist()},label={Text("구역")},modifier=Modifier.weight(1f))
                                 }
                                 Row { Checkbox(consent,{consent=it});Text("현재 위치를 확인했고 주차 세션 매칭에 참여합니다. 자료 제공은 별도 승인합니다.",Modifier.padding(top=12.dp)) }
-                                Button(modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),enabled=!busy&&consent&&(0 until vehicles.length()).any { vehicles.getJSONObject(it).optBoolean("verified") }&&facility.isNotBlank()&&floor.isNotBlank()&&zone.isNotBlank(),onClick={ perform {
-                                    val v=(0 until vehicles.length()).map { vehicles.getJSONObject(it) }.firstOrNull { it.optBoolean("verified") } ?: error("운영자가 확인한 차량이 필요합니다")
-                                    WitnessApi(server,token).call("/api/sessions","POST",JSONObject().put("vehicle",v.getString("id")).put("facility",facility).put("floor",floor).put("zone",zone).put("start",Instant.now().toString()).put("direction","unknown").put("consent",true))
+                                Button(modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),enabled=!busy&&consent&&(0 until vehicles.length()).any { vehicles.getJSONObject(it).optBoolean("verified") }&&selectedVehicle.isNotBlank()&&facility.isNotBlank()&&floor.isNotBlank()&&zone.isNotBlank(),onClick={ perform {
+                                    val v=(0 until vehicles.length()).map { vehicles.getJSONObject(it) }.firstOrNull { it.optBoolean("verified") && it.getString("id")==selectedVehicle } ?: error("운영자가 확인한 차량이 필요합니다")
+                                    WitnessApi(server,token).call("/api/sessions","POST",JSONObject().put("vehicle",v.getString("id")).put("facility",facility).put("floor",floor).put("zone",zone).put("start",Instant.now().toString()).put("direction",direction).put("consent",true))
                                     refresh(WitnessApi(server,token),it)
                                 } }) { Text("이 위치에서 참여하기  →") }
                                 OutlinedButton(modifier=Modifier.fillMaxWidth().heightIn(min=52.dp),enabled=!busy,onClick={perform {refresh(WitnessApi(server,token),it)}}) { Text("요청함 다시 확인") }
