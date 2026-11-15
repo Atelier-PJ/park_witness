@@ -2,7 +2,7 @@
 
 모든 차량과 사고는 가상 시나리오입니다. 실제 사고를 재현하지 않습니다. 사전 동의한 테스트 파일 또는 직접 만든 이미지로 시연하세요. [38초 제출용 시연 영상](../artifacts/submission/park-witness-demo.mp4)은 사고 접수와 주변 차량 요청 응답 흐름을 담았습니다. 영상의 4분할은 화면 예시이며 실제 CCTV·차량 영상이 아닙니다.
 
-제출 APK와 영상은 [GitHub Release](https://github.com/Atelier-PJ/park_witness/releases/tag/park-witness-demo-2026-11-15)에서도 받을 수 있습니다. APK는 `demoDebug` 빌드이며 설치용 Android 디버그 서명입니다. Play Store 배포용 서명 키는 아닙니다. 앱은 `com.parkwitness.app.demo` 패키지로 설치되며 서버 실행 방법과 시연 계정은 README를 참고하세요. [SHA-256](../artifacts/submission/SHA256SUMS.txt)으로 파일을 확인할 수 있습니다.
+제출 APK와 영상은 [GitHub Release](https://github.com/Atelier-PJ/park_witness/releases/tag/park-witness-submission-2026-11-15)에서 받을 수 있습니다. APK는 `demoRelease` variant를 제출용 키로 서명한 `com.parkwitness.app.demo` 패키지입니다. 로컬 FastAPI 서버를 실행한 에뮬레이터 시연용이며, Play Store 배포용이 아닙니다. [SHA-256](../artifacts/submission/SHA256SUMS.txt)으로 파일을 확인할 수 있습니다.
 
 1. README의 seed-demo로 세 계정을 만듭니다. API와 웹을 실행합니다.
 2. requester 로그인 → DEMO-PARK/B2/B, 최근 1시간~30분 전, 피해 내용 등록.

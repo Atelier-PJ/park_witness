@@ -14,7 +14,7 @@
 | 브라우저 실사용 | 앱 내 브라우저에서 계정 로그인·사건 접수·익명 1명 매칭·목격자 요청함·모의 PNG 업로드·미리보기·수신자/목적 확인·개별 승인 확인 |
 | 모바일 화면 | 약 580px 폭에서 요청함/승인 화면 확인. [승인 화면](mobile-approved.png) |
 | Android debug | demoDebug / pleosDebug APK 생성 성공 |
-| Android release | demoRelease / pleosRelease APK 생성 성공. 둘 다 **unsigned**, 제출용 서명 미적용 |
+| Android release | demoRelease / pleosRelease Gradle APK 생성 성공. Pleos release는 unsigned. 2026-11-15 공모전용 demoRelease는 제출 키로 서명하고 `apksigner` 검증 후 Pleos API 34 AVD에 설치·실행 확인. |
 | 로컬 전체 Android 빌드 | JDK 17.0.21, Gradle 8.11.1, AGP 8.9.2, Kotlin 2.0.21, SDK 35, Build Tools 36.0.0. BUILD SUCCESSFUL, 174 tasks. [로그](android-build.log) |
 | GitHub Actions | [서버·PostgreSQL·Android 작업 모두 성공](https://github.com/Atelier-PJ/park_witness/actions/runs/43218079313). APK 아티팩트 업로드 성공 |
 | Pleos 실제 차량 신호 | **미검증**. SDK 2.3.2의 typed Gear 조회·CarUxRestrictions 코드는 컴파일 완료. 실차 값/권한/변경 알림 검증과 구분 |

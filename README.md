@@ -44,10 +44,13 @@ JDK **17**, Android platform **35**, Build Tools **36.0.0**이 필요합니다. 
 | 빌드 | 동작 |
 | --- | --- |
 | demoDebug | 가상 P/UX 허용을 명시한 시연 앱. 로컬 HTTP 허용. |
+| demoRelease | 공모전 시연용 release variant. HTTP는 데모 에뮬레이터 주소 `10.0.2.2`에만 앱 코드에서 허용합니다. |
 | pleosDebug | Vehicle SDK 2.3.2의 읽기 전용 기어 조회 + CarUxRestrictions 연동 코드. 실제 신호 검증 전. |
-| demoRelease / pleosRelease | 서명되지 않은 release APK. HTTPS만 허용. 제출용 서명 키와 lineage는 별도 준비 필요. |
+| pleosRelease | HTTPS만 허용하는 Pleos용 release variant. Gradle 산출물에는 별도 서명이 필요합니다. |
 
 APK는 `app/build/outputs/apk/`에 생성됩니다. 차량 앱에는 홈 요약, 사고 접수, 받은 요청, 주차 참여 화면이 있습니다. 사고 화면의 기스 사진은 작성 방법을 보여주는 예시이며 사건에 첨부되지 않습니다. 실제 피해 사진과 영상 공유본 등록·미리보기·승인은 모바일 웹에서 진행합니다. `demoDebug` 자동 로그인은 시연용 requester 계정을 사용하며 실제 사용자 인증을 대체하지 않습니다. 에뮬레이터의 서버 주소는 `http://10.0.2.2:8000`입니다. 토큰은 메모리에만 보관하고, 시설·층·구역·서버 주소 초안은 기기에 저장합니다.
+
+공모전 제출용 APK는 `demoRelease` variant를 별도 서명해 [GitHub Release](https://github.com/Atelier-PJ/park_witness/releases/tag/park-witness-submission-2026-11-15)에 제공합니다. 서명 키는 저장소에 포함하지 않습니다. 이 데모 APK는 로컬 에뮬레이터 API 실행을 전제로 하며, 운영용 배포판이 아닙니다.
 
 Pleos 빌드는 미확인·제한·비주차·연결 종료·오래된 차량 상태에서 상세 입력을 잠급니다. 화면 복귀 시 재확인하고, 백그라운드 전환 시 상태를 무효화합니다. 기어값을 위치·층·출차 시각으로 바꾸지 않으며 모든 위치 등록은 **수동 입력**입니다. 시연 확인 환경은 Pleos Connect AVD, Android 14/API 34, 1080×600 px입니다. 실제 차량 신호와 UX 제한의 런타임 검증 결과는 [검증 기록](docs/VALIDATION.md)을 확인하세요.
 

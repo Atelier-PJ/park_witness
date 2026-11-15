@@ -6,7 +6,11 @@ import java.net.URL
 class WitnessApi(private val base: String, private val token: String) {
     fun call(path: String, method: String = "GET", body: JSONObject? = null): String {
         val url=URL(base.trimEnd('/')+path)
-        require(url.protocol=="https" || (BuildConfig.DEBUG && url.protocol=="http")) { "HTTPS 서버 주소를 사용하세요" }
+        val localDemoHttp = BuildConfig.FLAVOR == "demo" &&
+            url.protocol == "http" && url.host == "10.0.2.2"
+        require(url.protocol == "https" || localDemoHttp || (BuildConfig.DEBUG && url.protocol == "http")) {
+            "HTTPS 서버 주소를 사용하세요"
+        }
         val connection=url.openConnection() as HttpURLConnection
         try {
             connection.instanceFollowRedirects=false
