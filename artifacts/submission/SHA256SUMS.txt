@@ -1,0 +1,2 @@
+34dec45e028cb735d08de5b45e6bc5492e71cf92d6a71c441cb5b87fd0bc396b  artifacts/submission/park-witness-demo.mp4
+74442180f0eb60cef9ccf53f73edde6ab6e49fdb003ee4ebdcfcd020c704d9d6  artifacts/submission/park-witness-demo-debug.apk

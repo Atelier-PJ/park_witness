@@ -104,7 +104,7 @@ web/              서버와 같은 출처로 제공되는 반응형 모바일 UI
 docs/             기획 대응표·검증 증거·API 스냅샷
 ```
 
-[기획 대응 범위](docs/SCOPE.md) · [검증 기록](docs/VALIDATION.md) · [시연 순서](docs/DEMO.md)
+[기획 대응 범위](docs/SCOPE.md) · [검증 기록](docs/VALIDATION.md) · [시연 순서와 제출 자료](docs/DEMO.md)
 
 ## 화면 디자인
 
