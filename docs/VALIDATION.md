@@ -72,3 +72,10 @@ ParkWitness 프로젝트를 Android Studio에서 다시 열고 Pleos AVD를 시�
 [APK 다운로드](https://github.com/Atelier-PJ/park_witness/actions/runs/43555277285/artifacts/14097534696) · [브라우저 시험 화면](https://github.com/Atelier-PJ/park_witness/actions/runs/43555277285/artifacts/14097419531)
 
 운영용 SMTP/S3 자격증명·실제 시설 배치·실제 차량 권한 검토·실차 신호/주행 제한 런타임·제출용 서명은 외부 환경에서 별도 확인해야 합니다. 이 검증은 기획의 전체 출시·실차·파일럿 검증 완료를 뜻하지 않습니다.
+
+## 홈 화면과 기스 사진 예시 (2026-11-15)
+
+- 차량 앱에 홈 요약, 사고 접수, 받은 요청, 주차 참여 탭을 구성했습니다. demo flavor는 로컬 시연 계정으로 자동 로그인하며 pleos flavor의 인증 흐름에는 영향을 주지 않습니다.
+- 사고 접수 화면에 기스 예시 사진을 추가하고 `설명용 이미지 · 제출 자료 아님`으로 표시했습니다. 앱에 보이는 예시 사진은 서버로 전송되지 않습니다.
+- `:app:assembleDemoDebug` 빌드에 성공했고 Pleos Connect AVD(Android 14/API 34, 1080×600 px)에 설치해 로그인된 홈 화면과 사고 접수 화면을 확인했습니다.
+- 이번 변경을 운영 서버에 공개 배포하지 않았습니다. 저장소의 release APK 빌드는 서명되지 않으며, 실행 가능한 제출용 APK에는 서명 키가 필요합니다.

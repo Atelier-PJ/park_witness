@@ -15,7 +15,10 @@ def seed():
         t=now()
         for name,floor in [('requester','B2'),('witness','B2'),('other','B3')]:
             email=name+'@demo.local'
-            if db.scalar(select(User).where(User.email==email)): continue
+            existing=db.scalar(select(User).where(User.email==email))
+            if existing:
+                existing.password=password_hash(password)
+                continue
             user=User(email=email,password=password_hash(password));db.add(user);db.flush()
             v=Vehicle(owner=user.id,label='가상 차량 '+name,verified=True,source='demo_fixture_not_real_ownership');db.add(v);db.flush()
             db.add(Parking(owner=user.id,vehicle=v.id,facility='DEMO-PARK',floor=floor,zone='B',direction='north',start=t-7200,end=t-600,observed=t-600,expires=t+70*3600,consent=True,source='mock'))
